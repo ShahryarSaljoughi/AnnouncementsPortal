@@ -14,9 +14,23 @@ namespace TeachersInformationCrawler.Implementations
 {
     public class TeacherPageCrawler
     {
+
+        /// <summary>
+        /// این موارد را در آبجکت ورودی، مقدار دهی میکند:
+        /// شماره تلفن
+        /// آدرس
+        /// ایمیل
+        /// نام و نام خوانوادگی
+        /// </summary>
+        /// <param name="teacherInfo"></param>
+        /// <exception cref="ArgumentException">if passed TeacherInfo.ZnuUrl does not have value, exception would be raised</exception>
+        /// <returns></returns>
         public async Task CrawlPageAsync(TeacherInfo teacherInfo)
         {
-            var htmlDoc = await GetHtmlDocument(teacherInfo);
+            if(string.IsNullOrWhiteSpace(teacherInfo.ZnuUrl))
+                throw new ArgumentException("ZnuUrl property must have value");
+
+            var htmlDoc = await GetHtmlDocument(teacherInfo.ZnuUrl);
             var box = htmlDoc.DocumentNode.SelectSingleNode(
                 "//div[@id='art-main']/div[@class='art-sheet clearfix']/div[@class='art-layout-wrapper clearfix']//div[@class='art-layout-cell layout-item-2']");
             if (box is null)
@@ -50,13 +64,13 @@ namespace TeachersInformationCrawler.Implementations
             teacherInfo.Email = commaSeparatedEmails;
         }
 
-        private async Task<HtmlDocument> GetHtmlDocument(TeacherInfo teacherInfo)
+        private async Task<HtmlDocument> GetHtmlDocument(string url)
         {
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
                 httpClient.DefaultRequestHeaders.Referrer = new Uri("http://www.znu.ac.ir/members/");
-                var url = teacherInfo.ZnuUrl;
+           
                 var response = await httpClient.GetAsync(url);
                 var htmlString = await response.Content.ReadAsStringAsync();
                 var normalizedHtml = WebUtility.HtmlDecode(htmlString);

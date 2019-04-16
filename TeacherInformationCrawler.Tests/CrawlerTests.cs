@@ -19,5 +19,12 @@ namespace TeacherInformationCrawler.Tests
             };
             await pageCrawler.CrawlPageAsync(teacherInfo);
         }
+
+        [TestMethod]
+        public async Task StartCrawling_MustWork()
+        {
+            var crawler = new Crawler();
+            await crawler.StartCrawling();
+        }
     }
 }
