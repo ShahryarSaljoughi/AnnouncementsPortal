@@ -55,12 +55,12 @@ namespace TeachersInformationCrawler.Implementations
 
             var address = box.InnerHtml.Split("<br>").Last().Trim();
             teacherInfo.Address = address;
-            var phone = box.ChildNodes.First(n => n.Name == "span").InnerHtml.Split("<br>").Last().Trim();
+            var phone = box.ChildNodes.FirstOrDefault(n => n.Name == "span")?.InnerHtml?.Split("<br>")?.Last()?.Trim();
             teacherInfo.Phone = phone;
 
-            var emailPattern = @"([A-Za-z]|\d|\.|-|_)*@([A-Za-z]|\d|\.|-|_)*";
+            var emailPattern = @"([A-Za-z]|\d|\.|-|_)*(@|\[at\]|\(a\))([A-Za-z]|\d|\.|-|_)*";
             var emails = Regex.Matches(box.InnerText.Trim(), emailPattern);
-            string commaSeparatedEmails = emails.Select(m => m.Value).Aggregate((s1, s2) => s1 + "," + s2);
+            string commaSeparatedEmails = emails.Count>0? emails.Select(m => m.Value).Aggregate((s1, s2) => s1 + "," + s2): string.Empty;
             teacherInfo.Email = commaSeparatedEmails;
         }
 

@@ -6,7 +6,7 @@ namespace Models.Entities
     [Table(nameof(TeacherInfo), Schema = "AP")]
     public class TeacherInfo
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Email { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }

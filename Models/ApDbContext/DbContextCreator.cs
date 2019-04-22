@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Models.ApDbContext
 {
-    class DbContextCreator: IDesignTimeDbContextFactory<ApDbContext>
+    public class DbContextCreator: IDesignTimeDbContextFactory<ApDbContext>
     {
         public ApDbContext CreateDbContext(string[] args)
         {
@@ -22,6 +22,18 @@ namespace Models.ApDbContext
             optionsBuilder.UseSqlServer(connectionString);
             return new ApDbContext(optionsBuilder.Options);
             
+        }
+        public ApDbContext CreateDbContext()
+        {
+            var folderPath = Directory.GetCurrentDirectory();
+            var filePath = Path.Combine(folderPath, "appsettings.json");
+            var connectionString =
+                new ConfigurationBuilder().AddJsonFile(filePath).Build()["ConnectionStrings:Local"];
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApDbContext>();
+            optionsBuilder.UseSqlServer(connectionString);
+            return new ApDbContext(optionsBuilder.Options);
+
         }
     }
 }
