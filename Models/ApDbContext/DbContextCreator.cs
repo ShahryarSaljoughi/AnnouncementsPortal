@@ -9,30 +9,30 @@ using Microsoft.Extensions.Configuration;
 
 namespace Models.ApDbContext
 {
-    public class DbContextCreator: IDesignTimeDbContextFactory<ApDbContext>
+    public class DbContextCreator: IDesignTimeDbContextFactory<APDbContext>
     {
-        public ApDbContext CreateDbContext(string[] args)
+        public APDbContext CreateDbContext(string[] args)
         {
             var folderPath = Directory.GetCurrentDirectory();
             var filePath = Path.Combine(folderPath, "appsettings.json");
             var connectionString =
                 new ConfigurationBuilder().AddJsonFile(filePath).Build()["ConnectionStrings:Local"];
             
-            var optionsBuilder = new DbContextOptionsBuilder<ApDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<APDbContext>();
             optionsBuilder.UseSqlServer(connectionString);
-            return new ApDbContext(optionsBuilder.Options);
+            return new APDbContext(optionsBuilder.Options);
             
         }
-        public ApDbContext CreateDbContext()
+        public APDbContext CreateDbContext()
         {
             var folderPath = Directory.GetCurrentDirectory();
             var filePath = Path.Combine(folderPath, "appsettings.json");
             var connectionString =
                 new ConfigurationBuilder().AddJsonFile(filePath).Build()["ConnectionStrings:Local"];
 
-            var optionsBuilder = new DbContextOptionsBuilder<ApDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<APDbContext>();
             optionsBuilder.UseSqlServer(connectionString);
-            return new ApDbContext(optionsBuilder.Options);
+            return new APDbContext(optionsBuilder.Options);
 
         }
     }

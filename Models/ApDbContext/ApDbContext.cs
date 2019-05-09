@@ -10,16 +10,16 @@ using Remotion.Linq.Clauses;
 
 namespace Models.ApDbContext
 {
-    public class ApDbContext: DbContext
+    public class APDbContext: DbContext
     {
-        public ApDbContext()
+        public APDbContext()
         {
             
         }
 
 
         // used in DbContextCreator
-        public ApDbContext(DbContextOptions options) : base(options)
+        public APDbContext(DbContextOptions options) : base(options)
         {
 
         }
