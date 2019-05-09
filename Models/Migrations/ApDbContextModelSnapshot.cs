@@ -8,7 +8,7 @@ using Models.ApDbContext;
 
 namespace Models.Migrations
 {
-    [DbContext(typeof(ApDbContext.ApDbContext))]
+    [DbContext(typeof(ApDbContext.APDbContext))]
     partial class ApDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -18,6 +18,26 @@ namespace Models.Migrations
                 .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Models.Entities.Announcement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("OwnerId");
+
+                    b.Property<string>("PhoneNo");
+
+                    b.Property<string>("Text");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Announcement","AP");
+                });
 
             modelBuilder.Entity("Models.Entities.Post", b =>
                 {
@@ -40,6 +60,8 @@ namespace Models.Migrations
 
                     b.Property<string>("AcademicRank");
 
+                    b.Property<bool>("AccountActivated");
+
                     b.Property<string>("Address");
 
                     b.Property<string>("Email");
@@ -55,6 +77,13 @@ namespace Models.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TeacherInfo","AP");
+                });
+
+            modelBuilder.Entity("Models.Entities.Announcement", b =>
+                {
+                    b.HasOne("Models.Entities.TeacherInfo", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
                 });
 #pragma warning restore 612, 618
         }

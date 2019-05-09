@@ -13,8 +13,8 @@ namespace Models.Entities
         public string Address { get; set; }
         public string Phone { get; set; }
         public string ZnuUrl { get; set; }
-
         public string AcademicRank { get; set; } //مرتبه علمی
+        public bool AccountActivated { get; set;}
 
         // todo: add school and department : گروه آموزشی و دانشکده
     }
