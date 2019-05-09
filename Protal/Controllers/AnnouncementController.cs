@@ -14,6 +14,13 @@ namespace Protal.Controllers
     [Route("api/[controller]")]
     public class AnnouncementController : ControllerBase
     {
+
+        public APDbContext Db { get; set; }
+
+        public AnnouncementController(APDbContext db)
+        {
+            Db = db;
+        }
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -31,21 +38,17 @@ namespace Protal.Controllers
         // POST api/<controller>
         [HttpPost]
         public void Post(AnnouncementDto dto)
-        {
-            using (var db = new DbContextCreator().CreateDbContext())
+        {    
+            var newAnnouncement = new Announcement()
             {
-                var newAnnouncement = new Announcement()
-                {
-                    Text = dto.Text,
-                    Title = dto.Title,
-                    OwnerId = db.Set<TeacherInfo>().First().Id,
-                    Owner = db.Set<TeacherInfo>().First(),
-                    PhoneNo = string.Empty
-                };
-                db.Set<Announcement>().Add(newAnnouncement);
-                db.SaveChangesAsync();
-            }
-            
+                Text = dto.Text,
+                Title = dto.Title,
+                OwnerId = Db.Set<TeacherInfo>().First().Id,
+                Owner = Db.Set<TeacherInfo>().First(),
+                PhoneNo = string.Empty
+            };
+            Db.Set<Announcement>().Add(newAnnouncement);
+            Db.SaveChangesAsync();   
         }
 
         // PUT api/<controller>/5
