@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace Models.Entities
 {
     [Table(nameof(Announcement), Schema = "AP")]
-    class Announcement
+    public class Announcement
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; }

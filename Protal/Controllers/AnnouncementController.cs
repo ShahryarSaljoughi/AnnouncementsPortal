@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Models.ApDbContext;
+using Protal.DTOs;
+using Models.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,8 +30,22 @@ namespace Protal.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post(AnnouncementDto dto)
         {
+            using (var db = new DbContextCreator().CreateDbContext())
+            {
+                var newAnnouncement = new Announcement()
+                {
+                    Text = dto.Text,
+                    Title = dto.Title,
+                    OwnerId = db.Set<TeacherInfo>().First().Id,
+                    Owner = db.Set<TeacherInfo>().First(),
+                    PhoneNo = string.Empty
+                };
+                db.Set<Announcement>().Add(newAnnouncement);
+                db.SaveChangesAsync();
+            }
+            
         }
 
         // PUT api/<controller>/5
