@@ -13,9 +13,9 @@ namespace TeacherInformationCrawler.Tests
         public async Task CrawlTeacherPage_MustWrok()
         {
             var pageCrawler = new TeacherPageCrawler();
-            var teacherInfo = new TeacherInfo()
+            var teacherInfo = new Teacher()
             {
-                ZnuUrl = "http://www.znu.ac.ir/members/abbasi-majid"
+                ZnuUrl = "http://www.znu.ac.ir/members/ghaffari-omid"//"http://www.znu.ac.ir/members/abbasi-majid"
             };
             await pageCrawler.CrawlPageAsync(teacherInfo);
         }

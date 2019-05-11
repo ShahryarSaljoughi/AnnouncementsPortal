@@ -43,8 +43,8 @@ namespace Protal.Controllers
             {
                 Text = dto.Text,
                 Title = dto.Title,
-                OwnerId = Db.Set<TeacherInfo>().First().Id,
-                Owner = Db.Set<TeacherInfo>().First(),
+                OwnerId = Db.Set<Teacher>().First().Id,
+                Owner = Db.Set<Teacher>().First(),
                 PhoneNo = string.Empty
             };
             Db.Set<Announcement>().Add(newAnnouncement);

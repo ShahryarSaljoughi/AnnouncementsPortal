@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.Entities
 {
-    [Table(nameof(TeacherInfo), Schema = "AP")]
-    public class TeacherInfo
+    [Table(nameof(Teacher), Schema = "AP")]
+    public class Teacher
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Email { get; set; }
@@ -15,6 +15,9 @@ namespace Models.Entities
         public string ZnuUrl { get; set; }
         public string AcademicRank { get; set; } //مرتبه علمی
         public bool AccountActivated { get; set;}
+
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
 
         // todo: add school and department : گروه آموزشی و دانشکده
     }

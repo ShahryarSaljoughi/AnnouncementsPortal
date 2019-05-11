@@ -24,7 +24,7 @@ namespace TeachersInformationCrawler.Implementations
             var pageCrawler = new TeacherPageCrawler();
             var finished = false;
             int currentPage = 1;
-            var teacherInfos = new List<TeacherInfo>();
+            var teacherInfos = new List<Teacher>();
 
             while (!finished)
             {
@@ -35,7 +35,7 @@ namespace TeachersInformationCrawler.Implementations
 
                 foreach (var tableRow in tableRows)
                 {
-                    var teacherInfo = new TeacherInfo();
+                    var teacherInfo = new Teacher();
                     var url = "http://www.znu.ac.ir" + 
                         tableRow.Descendants("a").First().Attributes.First(attribute => attribute.Name == "href").Value;
                     teacherInfo.ZnuUrl = url;
@@ -53,7 +53,7 @@ namespace TeachersInformationCrawler.Implementations
             await SaveRecordsAsync(teacherInfos);
         }
 
-        private async Task SaveRecordsAsync(List<TeacherInfo> teacherInfos)
+        private async Task SaveRecordsAsync(List<Teacher> teacherInfos)
         {
             string connectoinString;
             using (var db = new DbContextCreator().CreateDbContext())
@@ -66,7 +66,7 @@ namespace TeachersInformationCrawler.Implementations
                     using (var bulkCopy = new SqlBulkCopy(connection))
                     {
                         bulkCopy.DestinationTableName =
-                            $"AP.{nameof(TeacherInfo)}";
+                            $"AP.{nameof(Teacher)}";
 
                         bulkCopy.ColumnMappings.Add("ZnuUrl", "ZnuUrl");
                         bulkCopy.ColumnMappings.Add("AcademicRank", "AcademicRank");
@@ -76,6 +76,7 @@ namespace TeachersInformationCrawler.Implementations
                         bulkCopy.ColumnMappings.Add("Firstname", "Firstname");
                         bulkCopy.ColumnMappings.Add("Lastname", "Lastname");
                         bulkCopy.ColumnMappings.Add("Id", "Id");
+                        bulkCopy.ColumnMappings.Add("AccountActivated", "AccountActivated");
 
                         var dataTable = new DataTable();
                         dataTable.Columns.Add("ZnuUrl", typeof(string));
@@ -86,8 +87,10 @@ namespace TeachersInformationCrawler.Implementations
                         dataTable.Columns.Add("Firstname", typeof(string));
                         dataTable.Columns.Add("Lastname", typeof(string));
                         dataTable.Columns.Add("Id", typeof(Guid));
+                        dataTable.Columns.Add("AccountActivated", typeof(bool));
 
-                        
+
+
 
                         var rows = teacherInfos.Select(ti =>
                         {
@@ -100,6 +103,7 @@ namespace TeachersInformationCrawler.Implementations
                             row["Firstname"] = ti.Firstname;
                             row["Lastname"] = ti.Lastname;
                             row["Id"] = ti.Id == default(Guid) ? Guid.NewGuid(): ti.Id;
+                            row["AccountActivated"] = false;
                             return row;
                         });
                         foreach (var dataRow in rows)

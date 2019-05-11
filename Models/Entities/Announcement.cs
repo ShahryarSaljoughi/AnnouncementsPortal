@@ -14,7 +14,7 @@ namespace Models.Entities
         public string Text { get; set; }
         public string PhoneNo { get; set; } // comma separated
 
-        public TeacherInfo Owner { get; set; }
+        public Teacher Owner { get; set; }
         [ForeignKey(nameof(Owner))]
         public Guid? OwnerId { get; set; }
     }
