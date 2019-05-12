@@ -82,7 +82,8 @@ namespace Protal.Services.Implementations
                 Issuer = "AnnouncementsPortal",
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = signingCredentials
+                SigningCredentials = signingCredentials,
+                Audience = "AnnouncementsPortal"
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

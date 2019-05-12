@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeachersInformationCrawler", "TeachersInformationCrawler\TeachersInformationCrawler.csproj", "{246912FD-870C-4AF8-8E74-49E2B11273DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeachersInformationCrawler", "TeachersInformationCrawler\TeachersInformationCrawler.csproj", "{246912FD-870C-4AF8-8E74-49E2B11273DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{9B29D78C-885C-45FE-B29D-19645AC39A5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{9B29D78C-885C-45FE-B29D-19645AC39A5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeacherInformationCrawler.Tests", "TeacherInformationCrawler.Tests\TeacherInformationCrawler.Tests.csproj", "{1FBD067D-5425-42D4-8973-FBE2588AECEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeacherInformationCrawler.Tests", "TeacherInformationCrawler.Tests\TeacherInformationCrawler.Tests.csproj", "{1FBD067D-5425-42D4-8973-FBE2588AECEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Protal", "Protal\Protal.csproj", "{4B8DF4D0-3487-41A6-9557-10B812034A24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protal", "Protal\Protal.csproj", "{4B8DF4D0-3487-41A6-9557-10B812034A24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

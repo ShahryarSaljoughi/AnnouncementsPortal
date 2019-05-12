@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -38,7 +39,6 @@ namespace Protal
             var connectionString = Configuration.GetConnectionString("Local");
             services.AddDbContext<APDbContext>(options => options.UseSqlServer(connectionString));
 
-            /*
             services.AddAuthentication(x =>
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,7 +46,7 @@ namespace Protal
                 })
                 .AddJwtBearer(x =>
                 {
-                    x.Events = new JwtBearerEvents
+                    /*x.Events = new JwtBearerEvents
                     {
                         OnTokenValidated = context =>
                         {
@@ -60,18 +60,26 @@ namespace Protal
                             }
                             return Task.CompletedTask;
                         }
-                    };
+                    };*/
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
+                    var key = Encoding.UTF8.GetBytes(Configuration["JwtSecret"]);
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
+
+                        ValidateIssuer = true, 
+                        ValidIssuer = "AnnouncementsPortal",
+
+                        ValidateAudience = true,
+                        ValidAudience = "AnnouncementsPortal",
+
+                        ClockSkew = TimeSpan.Zero,  //default: 5 mins
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true
                     };
                 });
-*/
 
 
             // In production, the Angular files will be served from this directory
@@ -82,6 +90,11 @@ namespace Protal
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme()
+                {
+                    In = "header",
+                    Type = "apiKey"
+                });
             });
             services.AddScoped<IUserService, UserService>();
             var builder = new ContainerBuilder();
@@ -108,7 +121,9 @@ namespace Protal
                 app.UseHsts();
             }
 
+            
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
