@@ -41,7 +41,7 @@ namespace Protal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(RegistrationDto dto)
+        public async Task<IActionResult> Login([FromBody]RegistrationDto dto)
         {
             Teacher user;
             try

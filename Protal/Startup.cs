@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
@@ -43,39 +44,38 @@ namespace Protal
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(x =>
                 {
-                    /*x.Events = new JwtBearerEvents
+                    x.Events = new JwtBearerEvents
                     {
                         OnTokenValidated = context =>
                         {
-                            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            /*var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                             var userId = int.Parse(context.Principal.Identity.Name);
                             var user = userService.GetById(userId);
                             if (user == null)
                             {
                                 // return unauthorized if user no longer exists
                                 context.Fail("Unauthorized");
-                            }
+                            }*/
                             return Task.CompletedTask;
                         }
-                    };*/
+                    };
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
                     var key = Encoding.UTF8.GetBytes(Configuration["JwtSecret"]);
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
+                        RequireSignedTokens = true,
+                        ClockSkew = TimeSpan.Zero,  //default: 5 mins
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-
                         ValidateIssuer = true, 
                         ValidIssuer = "AnnouncementsPortal",
-
                         ValidateAudience = true,
                         ValidAudience = "AnnouncementsPortal",
-
-                        ClockSkew = TimeSpan.Zero,  //default: 5 mins
                         RequireExpirationTime = true,
                         ValidateLifetime = true
                     };
@@ -93,8 +93,14 @@ namespace Protal
                 c.AddSecurityDefinition("Bearer", new ApiKeyScheme()
                 {
                     In = "header",
-                    Type = "apiKey"
+                    Type = "apiKey",
+                    Name = "Authorization"
                 });
+                c.AddSecurityRequirement(
+                    new Dictionary<string, IEnumerable<string>>()
+                    {
+                        {"Bearer", new string[]{}},
+                    });
             });
             services.AddScoped<IUserService, UserService>();
             var builder = new ContainerBuilder();

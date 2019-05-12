@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.ApDbContext;
 using Protal.DTOs;
@@ -11,7 +13,7 @@ using Models.Entities;
 
 namespace Protal.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class AnnouncementController : ControllerBase
     {
 
@@ -37,8 +39,10 @@ namespace Protal.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post(AnnouncementDto dto)
-        {    
+        [Authorize]
+        public async Task<IActionResult> Post(AnnouncementDto dto)
+        {
+            var user = await GetCurrentUser();   
             var newAnnouncement = new Announcement()
             {
                 Text = dto.Text,
@@ -48,7 +52,8 @@ namespace Protal.Controllers
                 PhoneNo = string.Empty
             };
             Db.Set<Announcement>().Add(newAnnouncement);
-            Db.SaveChangesAsync();   
+            await Db.SaveChangesAsync();
+            return Ok();
         }
 
         // PUT api/<controller>/5
@@ -61,6 +66,13 @@ namespace Protal.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        private async Task<Teacher> GetCurrentUser()
+        {
+            var userId = HttpContext.User.Claims.Where(i => i.ValueType == ClaimTypes.NameIdentifier);
+            var user = await Db.Set<Teacher>().FindAsync(userId);
+            return user;
         }
     }
 }
