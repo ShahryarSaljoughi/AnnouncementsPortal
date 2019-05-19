@@ -1,0 +1,13 @@
+<div class="container">
+  <form #loginForm="ngForm">
+    <div class="form-group">
+      <input [(ngModel)]="dto.email" name="email" type="email" class="form-control" id="email" dir="ltr" required>
+      
+    </div>
+    <div class="form-group">
+      <input [(ngModel)]="dto.password" name="password" type="password" class="form-control" id="password" required>
+
+    </div>
+    <input type="submit" [disabled]="!loginForm.form.valid" (click)="login()" class="btn btn-success" value="تایید">
+  </form>
+</div>

@@ -25,7 +25,7 @@ namespace Protal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegistrationDto dto)
+        public async Task<IActionResult> Register([FromBody]RegistrationDto dto)
         {
             //todo: input validation logic
 
@@ -50,11 +50,14 @@ namespace Protal.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e);
             }
 
             var jwt = UserService.GenerateJwt(user);
-            return Ok(jwt);
+            return Ok(new
+            {
+                jwt = jwt
+            });
         }
 
     }

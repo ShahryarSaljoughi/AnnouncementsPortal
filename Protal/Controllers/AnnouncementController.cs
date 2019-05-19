@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models.ApDbContext;
 using Protal.DTOs;
 using Models.Entities;
@@ -23,24 +24,10 @@ namespace Protal.Controllers
         {
             Db = db;
         }
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
+        
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Post(AnnouncementDto dto)
+        public async Task<IActionResult> PostNewAnnouncement(CreateAnnouncementDto dto)
         {
             var user = await GetCurrentUser();   
             var newAnnouncement = new Announcement()
@@ -56,18 +43,13 @@ namespace Protal.Controllers
             return Ok();
         }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPost]
+        public async Task<IActionResult> GetAnnouncements([FromBody]GetAnnouncementsDto dto)
         {
+            var ads = await Db.Set<Announcement>().Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize).ToListAsync();
+            return Ok(ads);
         }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
+        
         private async Task<Teacher> GetCurrentUser()
         {
             var userId = HttpContext.User.Claims.Where(i => i.ValueType == ClaimTypes.NameIdentifier);

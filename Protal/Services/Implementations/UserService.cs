@@ -55,7 +55,10 @@ namespace Protal.Services.Implementations
             var user = await GetUserByEmail(email);
             if (user is null)
                 throw new AppException("user does not exist") { ExceptionReason = ExceptionReason.LoginFailed};
-
+            if (user.AccountActivated == false)
+            {
+                throw new AppException("account has not been activated"){ExceptionReason = ExceptionReason.LoginFailed};
+            }
             var doesPasswordMatch = VerifyPassword(password, user.PasswordHash, user.PasswordSalt);
 
             if (!doesPasswordMatch)
