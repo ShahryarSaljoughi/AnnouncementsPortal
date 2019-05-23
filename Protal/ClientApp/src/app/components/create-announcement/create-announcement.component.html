@@ -1,0 +1,18 @@
+    
+<div class="container">
+  <form #registerForm="ngForm">
+    <div class="form-group">
+      <input [(ngModel)]="dto.title" class="form-control" type="text" name="title" placeholder="عنوان اطلاعیه">
+    </div>
+    <div  class="form-group">
+      <label for=""></label>
+      <textarea [(ngModel)]="dto.text"  placeholder="متن اطلاعیه" rows="10" type="text" name="text" id="" class="form-control"  aria-describedby="helpId"></textarea>
+    </div>
+    <div class=""></div>
+    <div class="form-group ">
+        <button type="submit" [disabled]="!registerForm.form.valid" (click)="createPost()" class="btn btn-success" value="ارسال"> ارسال</button>
+        <button  class="btn btn-danger mr-2" value="لغو">لغو</button>
+    </div>
+    
+  </form>
+</div>

@@ -27,15 +27,19 @@ namespace Protal.Controllers
         
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostNewAnnouncement(CreateAnnouncementDto dto)
+        public async Task<IActionResult> PostNewAnnouncement([FromBody]CreateAnnouncementDto dto)
         {
-            var user = await GetCurrentUser();   
+            var user = await GetCurrentUser();
+            if (user is null)
+            {
+                return BadRequest("there were problems in authenticating the client ");
+            }
             var newAnnouncement = new Announcement()
             {
                 Text = dto.Text,
                 Title = dto.Title,
-                OwnerId = Db.Set<Teacher>().First().Id,
-                Owner = Db.Set<Teacher>().First(),
+                OwnerId = user.Id,
+                Owner = user,
                 PhoneNo = string.Empty
             };
             Db.Set<Announcement>().Add(newAnnouncement);
@@ -52,7 +56,7 @@ namespace Protal.Controllers
         
         private async Task<Teacher> GetCurrentUser()
         {
-            var userId = HttpContext.User.Claims.Where(i => i.ValueType == ClaimTypes.NameIdentifier);
+            var userId = Guid.Parse(HttpContext.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier)?.Value);
             var user = await Db.Set<Teacher>().FindAsync(userId);
             return user;
         }

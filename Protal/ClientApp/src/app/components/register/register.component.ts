@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RegisterDto } from 'src/app/models/registerDto';
 import { dashCaseToCamelCase } from '@angular/animations/browser/src/util';
 import { HttpClient } from '@angular/common/http';
+import {  AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 export class RegisterComponent implements OnInit {
   dto: RegisterDto = new RegisterDto();
   confirmPassword = '';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   ngOnInit() {
   }
@@ -25,7 +26,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     debugger;
-    this.http.post('http://localhost:5000/api/Authentication/Register', this.dto).subscribe((v) => {});
+    this.auth.register(this.dto.email, this.dto.password).subscribe((v) => {});
   }
 
 }

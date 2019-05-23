@@ -1,16 +1,20 @@
-<div class="container">
-  <form #registerForm="ngForm">
-    <div class="form-group">
-      <input [(ngModel)]="dto.email" name="email" type="email" class="form-control" id="email" dir="ltr" required>
-      
-    </div>
-    <div class="form-group">
-      <input [(ngModel)]="dto.password" name="password" type="password" class="form-control" id="password" required>
-    </div>
-    <div class="form-group">
-      <input  [(ngModel)]="confirmPassword" name="confirmPassword" (change)="checkPasswordMatch()" type="password" class="form-control" id="confirmPassword" #password="ngModel" required>
-    </div>
-    <div class="alert alert-danger" [hidden]="checkPasswordMatch() || password.pristine">پسورد و تکرار آن برابر نیستند</div>
-    <input type="submit" [disabled]="!registerForm.form.valid" (click)="register()" class="btn btn-success" value="تایید">
-  </form>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+      <div class="col-5">
+          <form #registerForm="ngForm">
+              <div class="form-group">
+                <input [(ngModel)]="dto.email" name="email" type="email" class="form-control" id="email"  placeholder="ایمیل" required>
+                
+              </div>
+              <div class="form-group">
+                <input [(ngModel)]="dto.password" name="password" type="password" class="form-control" id="password" placeholder="رمز عبور" required>
+              </div>
+              <div class="form-group">
+                <input  [(ngModel)]="confirmPassword" name="confirmPassword" (change)="checkPasswordMatch()" type="password" placeholder="تکرار رمز عبور" class="form-control" id="confirmPassword" #password="ngModel" required>
+              </div>
+              <div class="alert alert-danger" [hidden]="checkPasswordMatch() || password.pristine">پسورد و تکرار آن برابر نیستند</div>
+              <input type="submit" [disabled]="!registerForm.form.valid" (click)="register()" class="btn btn-success" value="تایید">
+            </form>
+      </div>
+  </div>
 </div>
