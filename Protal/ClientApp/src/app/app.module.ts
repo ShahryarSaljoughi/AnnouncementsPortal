@@ -14,6 +14,8 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CreateAnnouncementComponent } from './components/create-announcement/create-announcement.component';
 import { AdverCardComponent } from './components/adver-card/adver-card.component';
+import { AdvertsDirectoryComponent } from './components/adverts-directory/adverts-directory.component';
+import { ThreeDotPipe } from './helper/dotdotdot';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { AdverCardComponent } from './components/adver-card/adver-card.component
     LoginComponent,
     RegisterComponent,
     CreateAnnouncementComponent,
-    AdverCardComponent
+    AdverCardComponent,
+    AdvertsDirectoryComponent,
+    ThreeDotPipe,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -43,7 +47,8 @@ import { AdverCardComponent } from './components/adver-card/adver-card.component
       { path: 'login', component: LoginComponent},
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'register', component: RegisterComponent},
-      { path: 'newAnnouncement', component: CreateAnnouncementComponent}
+      { path: 'newAnnouncement', component: CreateAnnouncementComponent},
+      
     ])
   ],
   providers: [],

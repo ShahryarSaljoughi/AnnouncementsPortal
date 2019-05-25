@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, Input } from '@angular/core';
+import { Announcement } from 'src/app/models/Announcement';
+import { ThreeDotPipe } from 'src/app/helper/dotdotdot';
 @Component({
   selector: 'app-adver-card',
   templateUrl: './adver-card.component.html',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class AdverCardComponent implements OnInit {
 
   constructor() { }
-
+  @Input() advertData: Announcement;
   ngOnInit() {
   }
 

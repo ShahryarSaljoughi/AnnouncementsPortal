@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+    font-family: Sahel;
+    src: url('assets/fonts/Sahel-FD.eot');
+    src: url('assets/fonts/Sahel-FD.eot?#iefix') format('embedded-opentype'),
+         url('assets/fonts/Sahel-FD.woff') format('woff'),
+         url('assets/fonts/Sahel-FD.ttf') format('truetype');
+    font-weight: normal;
+  }
+        
+  @font-face {
+    font-family: Sahel;
+    src: url('assets/fonts/Sahel-Bold-FD.eot');
+    src: url('assets/fonts/Sahel-Bold-FD.eot?#iefix') format('embedded-opentype'),
+         url('assets/fonts/Sahel-Bold-FD.woff') format('woff'),
+         url('assets/fonts/Sahel-Bold-FD.ttf') format('truetype');
+    font-weight: bold;
+  }
+  
+  @font-face {
+    font-family: Sahel;
+    src: url('assets/fonts/Sahel-Black-FD.eot' );
+    src: url('assets/fonts/Sahel-Black-FD.eot?#iefix') format('embedded-opentype'),
+         url('assets/fonts/Sahel-Black-FD.woff') format('woff'),
+         url('assets/fonts/Sahel-Black-FD.ttf') format('truetype');
+    font-weight: 900;
+  }
+
+* {
+    font-family: "Sahel";
+}
