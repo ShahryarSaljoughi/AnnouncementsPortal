@@ -6,13 +6,14 @@ import { LoginDto } from '../models/login-dto';
 import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { RegisterDto } from '../models/registerDto';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   login(email: string, password: string): Observable<void> {
     let dto = new LoginDto(email, password);
@@ -35,6 +36,11 @@ export class AuthService {
     if (token == null) {return false;}
     if (jwtHelper.isTokenExpired(token)) {return false; }
     return true;
+  }
+
+  signOut() {
+    localStorage.removeItem('jwtToken');
+    this.router.navigate(['']);
   }
 
 
