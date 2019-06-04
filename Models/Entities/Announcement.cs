@@ -17,5 +17,6 @@ namespace Models.Entities
         public Teacher Owner { get; set; }
         [ForeignKey(nameof(Owner))]
         public Guid? OwnerId { get; set; }
+        public DateTimeOffset? CreationDateTimeOffset { get; set; }
     }
 }

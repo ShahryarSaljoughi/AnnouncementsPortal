@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Models.Entities;
-using Protal.DTOs;
+using Portal.DTOs;
 
-namespace Protal.Services.Contracts
+namespace Portal.Services.Contracts
 {
     public interface IUserService
     {

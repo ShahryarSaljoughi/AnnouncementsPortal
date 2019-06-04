@@ -7,19 +7,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models.ApDbContext;
-using Protal.DTOs;
 using Models.Entities;
+using Portal.DTOs;
+using Portal.Helper;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Protal.Controllers
+namespace Portal.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class AnnouncementController : ControllerBase
     {
-
         public APDbContext Db { get; set; }
-
         public AnnouncementController(APDbContext db)
         {
             Db = db;
@@ -34,13 +32,15 @@ namespace Protal.Controllers
             {
                 return BadRequest("there were problems in authenticating the client ");
             }
+            var phone = string.IsNullOrWhiteSpace(dto.PhoneNo) ? user.Phone : dto.PhoneNo;
             var newAnnouncement = new Announcement()
             {
                 Text = dto.Text,
                 Title = dto.Title,
                 OwnerId = user.Id,
                 Owner = user,
-                PhoneNo = string.Empty
+                PhoneNo = phone,
+                CreationDateTimeOffset = DateTimeOffset.Now
             };
             Db.Set<Announcement>().Add(newAnnouncement);
             await Db.SaveChangesAsync();
@@ -50,8 +50,27 @@ namespace Protal.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAnnouncements([FromBody]GetAnnouncementsDto dto)
         {
-            var ads = await Db.Set<Announcement>().Skip((dto.PageNumber - 1) * dto.PageSize).Take(dto.PageSize).ToListAsync();
-            return Ok(ads);
+            var ads = await Db.Set<Announcement>().Include(t => t.Owner)
+                .Skip((dto.PageNumber - 1) * dto.PageSize)
+                .Take(dto.PageSize)
+                .ToListAsync();
+            var result = 
+                from ad in ads
+                select new AnnouncementDto()
+                {
+                    Author = new TeacherDto()
+                    {
+                        Name = string.Join(' ', ad.Owner.Firstname, ad.Owner.Lastname),
+                        Phone = ad.Owner.Phone,
+                        TeacherId = ad.OwnerId,
+                        ZnuUrl = ad.Owner.ZnuUrl,
+                    },
+                    PersianCreationTime = ad.CreationDateTimeOffset?.ToPersianDate(), //todo: convert to persian,
+                    Text = ad.Text,
+                    Title = ad.Title,
+                    PhoneNo = ad.PhoneNo
+                };
+            return Ok(result);
         }
         
         private async Task<Teacher> GetCurrentUser()

@@ -15,11 +15,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Models.ApDbContext;
-using Protal.Services.Contracts;
-using Protal.Services.Implementations;
+using Portal.Services.Contracts;
+using Portal.Services.Implementations;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace Protal
+namespace Portal
 {
     public class Startup
     {

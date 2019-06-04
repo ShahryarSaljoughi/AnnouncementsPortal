@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Announcement } from 'src/app/models/Announcement';
+import { AdvertService } from 'src/app/services/advert.service';
 
 @Component({
   selector: 'app-adverts-directory',
@@ -7,27 +8,22 @@ import { Announcement } from 'src/app/models/Announcement';
   styleUrls: ['./adverts-directory.component.css']
 })
 export class AdvertsDirectoryComponent implements OnInit {
-  private announcements: Announcement[];
-  constructor() { }
+  private announcements: Announcement[] = new Array<Announcement>();
+  constructor(private adService: AdvertService) { }
 
   ngOnInit() {
-    this.announcements = this.getAnnouncements();
+    this.FillAnnouncements();
+    debugger;
   }
 
-  getAnnouncements() {
-    let a = new Announcement();
-    a.authorFirstName = 'علی';
-    a.text = 'این متن تستی اعلانیه است این متن تستی اعلانیه است این متن تستی اعلانیه است این متن تستی اعلانیه است این متن تستی اعلانیه است این متن تستی اعلانیه است این متن تستی اعلانیه است این متن تستی اعلانیه است این متن تستی اعلانیه است ';
-    a.title = 'این عنوان ماک اعلانیه است';
-
-    let b = new Announcement();
-    b.authorFirstName = 'علی';
-    b.text = 'این متن تستی اعلانیه است';
-    b.title = 'این عنوان ماک اعلانیه است';
-    const result: Announcement[] = [
-      a, b
-    ];
-    return result;
+  FillAnnouncements() {
+    debugger;
+    this.adService.getAdverts(10, 1).subscribe((val) => {
+      val.forEach(element => {
+        this.announcements.push(element);
+      });
+    });
+    debugger;
   }
 
 }

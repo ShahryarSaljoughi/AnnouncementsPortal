@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.ApDbContext;
 using Models.Entities;
-using Protal.DTOs;
-using Protal.Services.Contracts;
-using Protal.Services.Implementations;
+using Portal.DTOs;
+using Portal.Services.Contracts;
+using Portal.Services.Implementations;
 
-namespace Protal.Controllers
+namespace Portal.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class AuthenticationController : ControllerBase

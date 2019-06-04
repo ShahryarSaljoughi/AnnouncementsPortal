@@ -12,11 +12,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.ApDbContext;
 using Models.Entities;
-using Protal.DTOs;
-using Protal.Helper;
-using Protal.Services.Contracts;
+using Portal.DTOs;
+using Portal.Helper;
+using Portal.Services.Contracts;
 
-namespace Protal.Services.Implementations
+namespace Portal.Services.Implementations
 {
     public class UserService: IUserService
     {
@@ -84,7 +84,7 @@ namespace Protal.Services.Implementations
             {
                 Issuer = "AnnouncementsPortal",
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddMinutes(1),//AddDays(10),
                 SigningCredentials = signingCredentials,
                 Audience = "AnnouncementsPortal",
                 NotBefore = DateTimeOffset.Now.DateTime

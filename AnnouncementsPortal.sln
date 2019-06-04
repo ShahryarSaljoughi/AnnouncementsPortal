@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeacherInformationCrawler.Tests", "TeacherInformationCrawler.Tests\TeacherInformationCrawler.Tests.csproj", "{1FBD067D-5425-42D4-8973-FBE2588AECEC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protal", "Protal\Protal.csproj", "{4B8DF4D0-3487-41A6-9557-10B812034A24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal", "Protal\Portal.csproj", "{4B8DF4D0-3487-41A6-9557-10B812034A24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿namespace Protal.DTOs
+﻿namespace Portal.DTOs
 {
     public class RegistrationDto
     {
