@@ -7,10 +7,8 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavMenuComponent {
   isExpanded = false;
-
-constructor(public auth: AuthService) {
-
-}
+ 
+  constructor(public auth: AuthService) {  }
   collapse() {
     this.isExpanded = false;
   }
@@ -18,6 +16,11 @@ constructor(public auth: AuthService) {
   signOut() {
     this.auth.signOut();
   }
+
+  isAuthenticated(): boolean {
+    return this.auth.isLoggedIn();
+  }
+  
 
 
 }

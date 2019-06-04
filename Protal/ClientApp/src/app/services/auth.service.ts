@@ -31,6 +31,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
+    debugger;
     let token = localStorage.getItem('jwtToken');
     let jwtHelper = new JwtHelperService();
     if (token == null) {return false;}

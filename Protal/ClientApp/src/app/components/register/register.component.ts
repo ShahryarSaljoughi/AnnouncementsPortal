@@ -3,6 +3,7 @@ import { RegisterDto } from 'src/app/models/registerDto';
 import { dashCaseToCamelCase } from '@angular/animations/browser/src/util';
 import { HttpClient } from '@angular/common/http';
 import {  AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,7 @@ import {  AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent implements OnInit {
   dto: RegisterDto = new RegisterDto();
   confirmPassword = '';
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient, private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -27,6 +28,7 @@ export class RegisterComponent implements OnInit {
   register() {
     debugger;
     this.auth.register(this.dto.email, this.dto.password).subscribe((v) => {});
+    this.router.navigate(['login']);
   }
 
 }

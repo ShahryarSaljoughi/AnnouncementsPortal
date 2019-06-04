@@ -17,7 +17,7 @@
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-info" [routerLink]='["/"]'>صفحه نخست</a>
           </li>
-          <li class="nav-item" >
+          <li class="nav-item" *ngIf="isAuthenticated()">
             <div ngbDropdown class="d-inline-block">
               <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle><i class="fas fa-user-graduate"></i></button>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
