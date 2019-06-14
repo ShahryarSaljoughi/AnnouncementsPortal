@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.ApDbContext;
 
 namespace Models.Migrations
 {
     [DbContext(typeof(APDbContext))]
-    partial class ApDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190614073106_UPloadFileTAbleAdded")]
+    partial class UPloadFileTAbleAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,8 +28,6 @@ namespace Models.Migrations
 
                     b.Property<DateTimeOffset?>("CreationDateTimeOffset");
 
-                    b.Property<Guid?>("FileId");
-
                     b.Property<Guid?>("OwnerId");
 
                     b.Property<string>("PhoneNo");
@@ -37,8 +37,6 @@ namespace Models.Migrations
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId");
 
                     b.HasIndex("OwnerId");
 
@@ -107,10 +105,6 @@ namespace Models.Migrations
 
             modelBuilder.Entity("Models.Entities.Announcement", b =>
                 {
-                    b.HasOne("Models.Entities.UploadedFile", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId");
-
                     b.HasOne("Models.Entities.Teacher", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");

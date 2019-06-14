@@ -30,7 +30,7 @@ namespace Portal.Controllers
         
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostNewAnnouncement([FromBody]CreateAnnouncementDto dto)
+        public async Task<IActionResult> PostNewAnnouncement([FromBody] PostAnnouncementDto dto)
         {
             var user = await GetCurrentUser();
             if (user is null)
@@ -45,7 +45,8 @@ namespace Portal.Controllers
                 OwnerId = user.Id,
                 Owner = user,
                 PhoneNo = phone,
-                CreationDateTimeOffset = DateTimeOffset.Now
+                CreationDateTimeOffset = DateTimeOffset.Now,
+                FileId = dto.ImageFileId
             };
             Db.Set<Announcement>().Add(newAnnouncement);
             await Db.SaveChangesAsync();
@@ -78,14 +79,65 @@ namespace Portal.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> PostAnnouncement(CreateAnnouncementDto dto)
+        {
+            var user = await GetCurrentUser();
+            if (user is null)
+            {
+                return BadRequest("there were problems in authenticating the client ");
+            }
+            var phone = string.IsNullOrWhiteSpace(dto.PhoneNo) ? user.Phone : dto.PhoneNo;
+            var newAnnouncement = new Announcement()
+            {
+                Text = dto.Text,
+                Title = dto.Title,
+                OwnerId = user.Id,
+                Owner = user,
+                PhoneNo = phone,
+                CreationDateTimeOffset = DateTimeOffset.Now
+            };
+            
+            long size = dto.uploadedFile.Length;
+            // full path to file in temp location
+            var filePath = Path.GetTempFileName();
+
+            if (dto.uploadedFile.Length > 0)
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.uploadedFile.CopyToAsync(stream);
+                }
+            }
+            var fileName = GetFileName(dto.uploadedFile);
+            var path = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                fileName
+            );
+            System.IO.File.Move(filePath, path);
+            var newFile = new UploadedFile()
+            {
+                CreationDateTimeOffset = DateTimeOffset.Now,
+                Id = Guid.NewGuid(),
+                FileName = fileName,
+                PhysicalPath = path
+            };
+            newAnnouncement.File = newFile;
+            Db.Add(newAnnouncement);
+            Db.Add(newFile);
+            await Db.SaveChangesAsync();
+            return Ok();
+        }
+
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> FileUpload(List<IFormFile> uploadedFile)
+        public async Task<IActionResult> UploadFile(List<IFormFile> uploadedFile)
         {
             long size = uploadedFile.Sum(f => f.Length);
             
-
             // full path to file in temp location
             var filePath = Path.GetTempFileName();
 
@@ -106,9 +158,19 @@ namespace Portal.Controllers
                 "wwwroot",
                 fileName
             );
-            System.IO.File.Move(filePath, path);    
+            System.IO.File.Move(filePath, path);
 
-            return Ok(new { count = uploadedFile.Count, size, path });
+            var newFile = new UploadedFile()
+            {
+                CreationDateTimeOffset = DateTimeOffset.Now,
+                Id = Guid.NewGuid(),
+                FileName = fileName,
+                PhysicalPath = path
+            };  
+            Db.Add(newFile);
+            await Db.SaveChangesAsync();
+
+            return Ok(new { newFile.Id, newFile.FileName, Url=$"/{newFile.FileName}"});
         }
 
         private string GetFileName(IFormFile file)
@@ -122,5 +184,13 @@ namespace Portal.Controllers
             var user = await Db.Set<Teacher>().FindAsync(userId);
             return user;
         }
+    }
+
+    public class CreateAnnouncementDto
+    {
+        public IFormFile uploadedFile { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public string PhoneNo { get; set; }
     }
 }

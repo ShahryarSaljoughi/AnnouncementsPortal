@@ -14,9 +14,14 @@ namespace Models.Entities
         public string Text { get; set; }
         public string PhoneNo { get; set; } // comma separated
 
+        [ForeignKey(nameof(File))]
+        public Guid? FileId { get; set; }
+        public UploadedFile File { get; set; }
+
         public Teacher Owner { get; set; }
         [ForeignKey(nameof(Owner))]
         public Guid? OwnerId { get; set; }
+
         public DateTimeOffset? CreationDateTimeOffset { get; set; }
     }
 }
