@@ -84,7 +84,7 @@ namespace Portal.Services.Implementations
             {
                 Issuer = "AnnouncementsPortal",
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(1),//AddDays(10),
+                Expires = DateTime.Now.AddDays(10),
                 SigningCredentials = signingCredentials,
                 Audience = "AnnouncementsPortal",
                 NotBefore = DateTimeOffset.Now.DateTime

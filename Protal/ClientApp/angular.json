@@ -28,7 +28,7 @@
               "src/styles.css"
             ],
             "scripts": [
-              "nome_modules/alertifyjs/src/alertify.min.js"
+              "node_modules/alertifyjs/build/alertify.min.js"
             ]
           },
           "configurations": {

@@ -16,7 +16,6 @@ export class CreateAnnouncementComponent implements OnInit {
   }
 
   createPost() {
-    debugger;
     this.http.post('http://localhost:5000/api/Announcement/PostNewAnnouncement', this.dto).subscribe();
   }
 

@@ -20,7 +20,7 @@ export class AuthService {
     return this.http.post('http://localhost:5000/api/authentication/Login', dto).pipe(
       tap((response: any) => {
         // remove if any expired token is still there
-        localStorage.removeItem('jwtToken'); 
+        localStorage.removeItem('jwtToken');
         localStorage.setItem('jwtToken', response.jwt);
       }));
   }
@@ -31,7 +31,6 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    debugger;
     let token = localStorage.getItem('jwtToken');
     let jwtHelper = new JwtHelperService();
     if (token == null) {return false;}

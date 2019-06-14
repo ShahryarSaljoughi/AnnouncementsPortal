@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Models.ApDbContext;
 using Models.Entities;
 using Portal.DTOs;
@@ -18,9 +21,11 @@ namespace Portal.Controllers
     public class AnnouncementController : ControllerBase
     {
         public APDbContext Db { get; set; }
-        public AnnouncementController(APDbContext db)
+        public IConfiguration Configuration { get; }
+        public AnnouncementController(APDbContext db, IConfiguration configuration)
         {
             Db = db;
+            Configuration = configuration;
         }
         
         [HttpPost]
@@ -72,7 +77,45 @@ namespace Portal.Controllers
                 };
             return Ok(result);
         }
-        
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> FileUpload(List<IFormFile> uploadedFile)
+        {
+            long size = uploadedFile.Sum(f => f.Length);
+            
+
+            // full path to file in temp location
+            var filePath = Path.GetTempFileName();
+
+            foreach (var formFile in uploadedFile)
+            {
+                if (formFile.Length > 0)
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            var fileName = GetFileName(uploadedFile.First());
+            var path = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                fileName
+            );
+            System.IO.File.Move(filePath, path);    
+
+            return Ok(new { count = uploadedFile.Count, size, path });
+        }
+
+        private string GetFileName(IFormFile file)
+        {
+            var fileName = $"{DateTimeOffset.UtcNow.Ticks}_{file.FileName.Replace(' ', '_').ToLower()}";
+            return fileName;
+        }
         private async Task<Teacher> GetCurrentUser()
         {
             var userId = Guid.Parse(HttpContext.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier)?.Value);

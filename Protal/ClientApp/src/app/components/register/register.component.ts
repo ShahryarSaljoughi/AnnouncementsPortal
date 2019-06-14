@@ -26,7 +26,6 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    debugger;
     this.auth.register(this.dto.email, this.dto.password).subscribe((v) => {});
     this.router.navigate(['login']);
   }

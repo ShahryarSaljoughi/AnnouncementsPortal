@@ -13,17 +13,14 @@ export class AdvertsDirectoryComponent implements OnInit {
 
   ngOnInit() {
     this.FillAnnouncements();
-    debugger;
   }
 
   FillAnnouncements() {
-    debugger;
     this.adService.getAdverts(10, 1).subscribe((val) => {
       val.forEach(element => {
         this.announcements.push(element);
       });
     });
-    debugger;
   }
 
 }
