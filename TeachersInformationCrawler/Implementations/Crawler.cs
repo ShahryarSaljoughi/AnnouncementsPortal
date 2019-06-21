@@ -12,6 +12,7 @@ using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
 using Models.ApDbContext;
 using Models.Entities;
+using Models.Enums;
 using TeachersInformationCrawler.Contracts;
 
 namespace TeachersInformationCrawler.Implementations
@@ -45,20 +46,24 @@ namespace TeachersInformationCrawler.Implementations
                     var url = "http://www.znu.ac.ir" + 
                         tableRow.Descendants("a").First().Attributes.First(attribute => attribute.Name == "href").Value;
 
+                    var college = tableRow.Elements("td").ElementAt(tableRow.Elements("td").Count() - 2).InnerText;
                     var department = tableRow.Elements("td").Last().InnerText;
-
-                    teacherInfo.Department = await DbContext.Set<Department>()
-                        .FirstOrDefaultAsync(i => i.PersianName.Contains(department));
+                    var departmentEntity = await DbContext.Set<Department>()
+                        .FirstOrDefaultAsync(i =>
+                            (department.Contains(i.PersianName) || i.PersianName.Contains(department))
+                            && i.College.GetPersianTranslation().Contains(college));
+                    teacherInfo.Department = departmentEntity;
+                    teacherInfo.DepartmentId = departmentEntity?.Id;
                     teacherInfo.ZnuUrl = url;
                     await pageCrawler.CrawlPageAsync(teacherInfo);
                     teacherInfos.Add(teacherInfo);
                 }
-                
                 currentPage++;
                 if (tableRows.Count < 60)
                 {
                     finished = true;
                 }
+                
             }
 
             await SaveRecordsAsync(teacherInfos);
@@ -88,6 +93,7 @@ namespace TeachersInformationCrawler.Implementations
                         bulkCopy.ColumnMappings.Add("Lastname", "Lastname");
                         bulkCopy.ColumnMappings.Add("Id", "Id");
                         bulkCopy.ColumnMappings.Add("AccountActivated", "AccountActivated");
+                        bulkCopy.ColumnMappings.Add("DepartmentId", "DepartmentId");
 
                         var dataTable = new DataTable();
                         dataTable.Columns.Add("ZnuUrl", typeof(string));
@@ -99,9 +105,7 @@ namespace TeachersInformationCrawler.Implementations
                         dataTable.Columns.Add("Lastname", typeof(string));
                         dataTable.Columns.Add("Id", typeof(Guid));
                         dataTable.Columns.Add("AccountActivated", typeof(bool));
-
-
-
+                        dataTable.Columns.Add("DepartmentId", typeof(Guid));
 
                         var rows = teacherInfos.Select(ti =>
                         {
@@ -115,6 +119,7 @@ namespace TeachersInformationCrawler.Implementations
                             row["Lastname"] = ti.Lastname;
                             row["Id"] = ti.Id == default(Guid) ? Guid.NewGuid(): ti.Id;
                             row["AccountActivated"] = false;
+                            row["DepartmentId"] = (object) ti.DepartmentId ?? DBNull.Value;
                             return row;
                         });
                         foreach (var dataRow in rows)
@@ -126,7 +131,6 @@ namespace TeachersInformationCrawler.Implementations
                 }
             }
 
-            throw new NotImplementedException();
         }
 
         private async Task<HtmlDocument> GetTeachersList(int page = 0)
@@ -140,7 +144,7 @@ namespace TeachersInformationCrawler.Implementations
                 var url = $@"http://www.znu.ac.ir/members/index?ZuTeachers_page={ page }";
                 var response = await httpClient.GetAsync(url);
                 var htmlString = await response.Content.ReadAsStringAsync();
-                var normalizedHtml = WebUtility.HtmlDecode(htmlString);
+                var normalizedHtml = WebUtility.HtmlDecode(htmlString)?.Replace('ي', 'ی')?.Replace('ك', 'ک');
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(normalizedHtml);
                 return htmlDoc;
