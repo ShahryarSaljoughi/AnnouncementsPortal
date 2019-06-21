@@ -19,6 +19,7 @@ import { AdvertsDirectoryComponent } from './components/adverts-directory/advert
 import { ThreeDotPipe } from './helper/dotdotdot';
 import { AdverDetailComponent } from './components/adver-detail/adver-detail.component';
 import { AuthGuard } from './auth.guard';
+import { LandingComponent } from './components/landing/landing.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AuthGuard } from './auth.guard';
     AdvertsDirectoryComponent,
     ThreeDotPipe,
     AdverDetailComponent,
+    LandingComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

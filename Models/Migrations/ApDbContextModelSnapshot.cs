@@ -45,6 +45,20 @@ namespace Models.Migrations
                     b.ToTable("Announcement","AP");
                 });
 
+            modelBuilder.Entity("Models.Entities.Department", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("College");
+
+                    b.Property<string>("PersianName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Department","AP");
+                });
+
             modelBuilder.Entity("Models.Entities.Post", b =>
                 {
                     b.Property<Guid>("Id")
@@ -70,6 +84,8 @@ namespace Models.Migrations
 
                     b.Property<string>("Address");
 
+                    b.Property<Guid?>("DepartmentId");
+
                     b.Property<string>("Email");
 
                     b.Property<string>("Firstname");
@@ -85,6 +101,8 @@ namespace Models.Migrations
                     b.Property<string>("ZnuUrl");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Teacher","AP");
                 });
@@ -114,6 +132,13 @@ namespace Models.Migrations
                     b.HasOne("Models.Entities.Teacher", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("Models.Entities.Teacher", b =>
+                {
+                    b.HasOne("Models.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId");
                 });
 #pragma warning restore 612, 618
         }

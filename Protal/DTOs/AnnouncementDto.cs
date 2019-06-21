@@ -13,5 +13,6 @@ namespace Portal.DTOs
         public string PersianCreationTime { get; set; }
         public TeacherDto Author { get; set; }
         public string PhoneNo { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

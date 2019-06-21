@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Protal\Portal.csproj" />
     <ProjectReference Include="..\TeachersInformationCrawler\TeachersInformationCrawler.csproj" />
   </ItemGroup>

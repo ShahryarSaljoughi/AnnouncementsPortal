@@ -15,6 +15,9 @@ namespace Models.Entities
         public string ZnuUrl { get; set; }
         public string AcademicRank { get; set; } //مرتبه علمی
         public bool AccountActivated { get; set;}
+        public Department Department { get; set; }
+        [ForeignKey(nameof(Department))]
+        public Guid? DepartmentId { get; set; }
 
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }

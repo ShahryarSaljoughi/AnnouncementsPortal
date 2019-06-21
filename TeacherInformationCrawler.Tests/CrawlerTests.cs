@@ -24,7 +24,7 @@ namespace TeacherInformationCrawler.Tests
         public async Task StartCrawling_MustWork()
         {
             var crawler = new Crawler();
-            await crawler.StartCrawling();
+            await crawler.StartCrawlingAsync();
         }
     }
 }

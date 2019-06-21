@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace TeachersInformationCrawler.Contracts
 {
-    interface ICrawler
+    public interface ICrawler
     {
-        Task StartCrawling();
+        Task StartCrawlingAsync();
     }
 }

@@ -56,7 +56,7 @@ namespace Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAnnouncements([FromBody]GetAnnouncementsDto dto)
         {
-            var ads = await Db.Set<Announcement>().Include(t => t.Owner)
+            var ads = await Db.Set<Announcement>().Include(t => t.Owner).Include(t => t.File)
                 .Skip((dto.PageNumber - 1) * dto.PageSize)
                 .Take(dto.PageSize)
                 .ToListAsync();
@@ -74,7 +74,8 @@ namespace Portal.Controllers
                     PersianCreationTime = ad.CreationDateTimeOffset?.ToPersianDate(), //todo: convert to persian,
                     Text = ad.Text,
                     Title = ad.Title,
-                    PhoneNo = ad.PhoneNo
+                    PhoneNo = ad.PhoneNo,
+                    ImageUrl = $"/{ad.File.FileName}"
                 };
             return Ok(result);
         }

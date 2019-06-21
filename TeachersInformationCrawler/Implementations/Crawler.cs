@@ -18,8 +18,14 @@ namespace TeachersInformationCrawler.Implementations
 {
     public class Crawler: ICrawler
     {
+        public APDbContext DbContext { get; set; }
+
+        public Crawler(APDbContext db)
+        {
+            DbContext = db;
+        }
         
-        public async Task StartCrawling()
+        public async Task StartCrawlingAsync()
         {
             var pageCrawler = new TeacherPageCrawler();
             var finished = false;
@@ -38,6 +44,11 @@ namespace TeachersInformationCrawler.Implementations
                     var teacherInfo = new Teacher();
                     var url = "http://www.znu.ac.ir" + 
                         tableRow.Descendants("a").First().Attributes.First(attribute => attribute.Name == "href").Value;
+
+                    var department = tableRow.Elements("td").Last().InnerText;
+
+                    teacherInfo.Department = await DbContext.Set<Department>()
+                        .FirstOrDefaultAsync(i => i.PersianName.Contains(department));
                     teacherInfo.ZnuUrl = url;
                     await pageCrawler.CrawlPageAsync(teacherInfo);
                     teacherInfos.Add(teacherInfo);
