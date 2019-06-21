@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Models.ApDbContext;
 using Models.Entities;
+using Models.Enums;
 using Portal.DTOs;
 using Portal.Helper;
 
@@ -56,7 +57,7 @@ namespace Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAnnouncements([FromBody]GetAnnouncementsDto dto)
         {
-            var ads = await Db.Set<Announcement>().Include(t => t.Owner).Include(t => t.File)
+            var ads = await Db.Set<Announcement>().Include(t => t.Owner).Include(t => t.File).Include(a => a.Owner.Department)
                 .Skip((dto.PageNumber - 1) * dto.PageSize)
                 .Take(dto.PageSize)
                 .ToListAsync();
@@ -70,12 +71,14 @@ namespace Portal.Controllers
                         Phone = ad.Owner.Phone,
                         TeacherId = ad.OwnerId,
                         ZnuUrl = ad.Owner.ZnuUrl,
+                        Department = ad.Owner.Department.PersianName,
+                        College = ad.Owner?.Department?.College.GetPersianTranslation()
                     },
                     PersianCreationTime = ad.CreationDateTimeOffset?.ToPersianDate(), //todo: convert to persian,
                     Text = ad.Text,
                     Title = ad.Title,
                     PhoneNo = ad.PhoneNo,
-                    ImageUrl = $"/{ad.File.FileName}"
+                    ImageUrl = ad.File is null ? null: $"/{ad.File?.FileName}"
                 };
             return Ok(result);
         }

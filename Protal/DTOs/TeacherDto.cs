@@ -11,5 +11,8 @@ namespace Portal.DTOs
         public string Name { get; set; }
         public string Phone { get; set; }
         public string ZnuUrl { get; set; }
+        public string College { get; set; }
+        public string Department { get; set; }
+
     }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +9,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class AppComponent {
   title = 'app';
-  constructor(private route: ActivatedRoute) {
-    
+  constructor(private route: ActivatedRoute, private router: Router, private location: Location) {
   }
   isHomePage(): boolean {
-    debugger;
-    const result = this.route.component['name'];
-    return result === 'AppComponent';
+    const path = this.location.path();
+    const result = path === '/' || path === '';
+    return result;
   }
 }

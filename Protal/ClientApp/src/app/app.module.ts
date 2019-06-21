@@ -54,6 +54,7 @@ import { LandingComponent } from './components/landing/landing.component';
       { path: 'login', component: LoginComponent},
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'register', component: RegisterComponent},
+      { path: 'directory', component: AdvertsDirectoryComponent},
       { path: 'newAnnouncement', component: CreateAnnouncementComponent, canActivate: [AuthGuard]},
     ])
   ],
