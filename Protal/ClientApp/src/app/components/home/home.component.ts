@@ -1,15 +1,25 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],encapsulation: ViewEncapsulation.None
+  styleUrls: ['./home.component.css'],
+  //encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+  }
+
+  goToDirectory() {
+    this.router.navigate(['directory']);
+  }
+
+  goToRegister() {
+    this.router.navigate(['/register']);
   }
 
 }

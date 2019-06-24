@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="assets/bootstrapp.min.css"> -->
     <!-- <link rel="stylesheet" href="css/tooplate-style.css"> -->
     <title>New Spot HTML Page by Tooplate</title>
     <!--
@@ -17,7 +17,7 @@
     -->
 </head>
 
-<body >
+<body>
     <div class="tm-container mx-auto">
         <section class="tm-section tm-section-1">
             <div class="container">
@@ -29,8 +29,8 @@
                                 <p class="tm-site-subtitle">سامانه اطلاع رسانی دانشگاه زنجان</p>
                             </header>
                             <p>این سرویس، به منظور تسهیل امر اطلاع رسانی به دانشجویان دانشگاه زنجان ایجاد شده است. امید است که این سامانه بتواند نقشی در نزدیک تر کردن هر چه بیشتر داشنجویان، استاتید و دانشگاه بهم ایفا کند</p>
-                            <p class="text-center mt-4 mb-0">
-                                <a data-scroll href="#tm-section-2" class="btn tm-btn-secondary">آخرین آگهی ها</a>
+                            <p class="text-center mt-4 mb-0" (click)="goToDirectory()">
+                                <button href="" class="btn tm-btn-secondary">آخرین آگهی ها</button>
                             </p>
 
                         </div>
@@ -40,13 +40,13 @@
         </section>
         <section id="tm-section-2" class="tm-section pt-2 pb-2">
             <div class="container">
-                <div class="row" dir="rtl" lang="fa">
+                <div class="row text-right">
                     <div class="col-xl-5 col-lg-6 tm-flex-center-v tm-text-container tm-section-left">
-                        <h2 class="tm-color-secondary mb-4 text-right">اساتید </h2>
-                        <p class="mb-4 text-right"> با استفاده از این سامانه میتوانند اطلاعیه های خود را سریعتر از همیشه در اختیار دانشجویان قرار دهند.</p>
+                        <h2 class="tm-color-secondary mb-4">اساتید </h2>
+                        <p class="mb-4">می توانند با استفاده از این سامانه، اطلاعیه های خود را راحتر از قبل در معرض دید دانشجویان خود قرار دهند.</p>
                         <p class="mb-5"></p>
-                        <p class="text-right mb-0">
-                            <a href="#tm-section-3" class="btn tm-btn-secondary">Continue...</a>
+                        <p class="text-right mb-0" (click)="goToRegister()">
+                            <button  class="btn tm-btn-secondary">فعالسازی حساب کاربری اساتید</button>
                         </p>
                     </div>
                     <div class="col-xl-7 col-lg-6 tm-circle-img-container">
@@ -57,21 +57,20 @@
         </section>
         <section id="tm-section-3" class="tm-section tm-section-3">
             <div class="container">
-                <div class="row">
+                <div class="row text-right">
                     <div class="col-sm-12 tm-section-2-right">
                         <div class="tm-bg-circle-white tm-bg-circle-pad-2 tm-flex-center-v">
                             <header>
-                                <h2 class="tm-color-primary">Duis vel vaius eros</h2>
+                                <h2 class="tm-color-primary">دانشجویان</h2>
                             </header>
-                            <p>In hac habitasse platea dictumst. Ut tristique, purus vitae egestas hendrerit, tellus elit luctus
-                                lacus
+                            <p>از این به بعد میتوانند بدون حضور فیزیکی در دانشگاه، و ایستادن مقابل بوردهای آموزش و دانشکده، از آخرین اخبار و اطلاعیه ها، با خبر شوند.
                             </p>
-                            <ul class="dashed">
+                            <!-- <ul class="dashed">
                                 <li>Quisque lobortis sem ut facilisis mattis</li>
                                 <li>Sed eu pellentesque sapien</li>
                                 <li>Mauris sagittis dui arcu</li>
                                 <li>Sed luctus metus faucibus nec</li>
-                            </ul>
+                            </ul> -->
                         </div>
                     </div>
                 </div>
@@ -105,9 +104,9 @@
         <footer class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <p class="small mb-4 tm-footer-text">Copyright &copy; 2018 Company Name 
+                    <p class="small mb-4 tm-footer-text">تمامی حقوق برای دانشگاه زنجان &copy; محفوظ است 
                     
-                    | Design: <a rel="nofollow" href="https://www.tooplate.com" class="tm-footer-link">Tooplate</a>
+                    | Design: <a rel="nofollow" href="http://znu.ac.ir" class="tm-footer-link">ZNU</a>
                     </p>
                 </div>
             </div>
