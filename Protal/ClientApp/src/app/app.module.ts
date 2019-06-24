@@ -8,7 +8,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
-import { HomeComponent } from './components/home/home.component';
+
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LoginComponent } from './components/login/login.component';
@@ -20,12 +20,13 @@ import { ThreeDotPipe } from './helper/dotdotdot';
 import { AdverDetailComponent } from './components/adver-detail/adver-detail.component';
 import { AuthGuard } from './auth.guard';
 import { LandingComponent } from './components/landing/landing.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
     HomeComponent,
+    NavMenuComponent,
     CounterComponent,
     FetchDataComponent,
     LoginComponent,
