@@ -45,7 +45,7 @@ namespace Portal.Services.Implementations
             }
             newTeacher.PasswordHash = passwordHash;
             newTeacher.PasswordSalt = passwordSalt;
-            newTeacher.AccountActivated = true;
+            newTeacher.AccountActivated = false;
 
             await Db.SaveChangesAsync();
         }

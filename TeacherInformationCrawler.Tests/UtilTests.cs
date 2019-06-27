@@ -33,8 +33,8 @@ namespace TeacherInformationCrawler.Tests
         {
             var factory = new DbContextCreator();
             var db = factory.CreateDbContext();
-            var service = new EmailSenderService(db);
-            await service.SendEmailVerificationLink(Guid.Parse("02445C50-2D8E-4245-BB78-007503F3CBA0"));
+//            var service = new EmailSenderService(db);
+//            await service.SendEmailVerificationLink(Guid.Parse("02445C50-2D8E-4245-BB78-007503F3CBA0"));
         }
     }
 }

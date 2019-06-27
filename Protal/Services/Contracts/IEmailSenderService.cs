@@ -7,5 +7,6 @@ namespace Portal.Services.Contracts
 {
     public interface IEmailSenderService
     {
+        Task SendEmailVerificationLink(Guid userId);
     }
 }

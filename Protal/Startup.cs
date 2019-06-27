@@ -105,6 +105,7 @@ namespace Portal
                 c.OperationFilter<FileUploadOperation>();
             });
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailSenderService, EmailSenderService>();
             var builder = new ContainerBuilder();
 
             builder.Populate(services);

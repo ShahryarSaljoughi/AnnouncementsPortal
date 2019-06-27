@@ -13,6 +13,7 @@ using Google.Apis.Gmail.v1;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Models.ApDbContext;
 using Models.Entities;
 using Portal.Services.Contracts;
@@ -22,12 +23,15 @@ namespace Portal.Services.Implementations
     public class EmailSenderService: IEmailSenderService
     {
         private APDbContext DbContext { get; set; }
-        public EmailSenderService(APDbContext db)
+        private IConfiguration Configuration {get; set;}
+        public EmailSenderService(APDbContext db, IConfiguration config)
         {
             DbContext = db;
+            Configuration = config;
         }
         public async Task SendEmailVerificationLink(Guid userId)
         {
+            var user = await DbContext.Set<Teacher>().FindAsync(userId);
             UserCredential credential;
             string[] Scopes = { GmailService.Scope.GmailReadonly, GmailService.Scope.GmailCompose };
             string ApplicationName = "my application";
@@ -51,41 +55,37 @@ namespace Portal.Services.Implementations
                 HttpClientInitializer = credential,
                 ApplicationName = ApplicationName,
             });
-            
-            UsersResource.LabelsResource.ListRequest request = service.Users.Labels.List("me");
-            // List labels.
-            IList<Label> labels = request.Execute().Labels;
-            Console.WriteLine("Labels:");
-            if (labels != null && labels.Count > 0)
-            {
-                foreach (var labelItem in labels)
-                {
-                    Console.WriteLine("{0}", labelItem.Name);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No labels found.");
-            }
-
-            var messageBodt = System.Convert.ToBase64String(
-                Encoding.UTF8.GetBytes("To: s.shahryar75@gmail.com,\r\n" +
-                                       "Subject: subject Test\r\n" +
-                                       "Content-Type: text/html; charset=us-ascii\r\n\r\n" +
-                                       "<h1>Body Test </h1>")
-            );
+            var code = GetRandomCode();
+            var base64EmailBody = GetEmailBody(user, code);
             var message = new Message();
-            message.Raw = messageBodt;
+            message.Raw = base64EmailBody;
             
-            UsersResource.MessagesResource.SendRequest request2 =
-                service.Users.Messages.Send(message, "me");
-            
+            UsersResource.MessagesResource.SendRequest request2 = service.Users.Messages.Send(message, "me");   
             request2.Execute();
 
+            var codeRow = new EmailVerificaionCode()
+            {
+                Id = Guid.NewGuid(), Code = code.ToString(), UserId = user.Id
+            };
+            DbContext.Set<EmailVerificaionCode>().Add(codeRow);
+            await DbContext.SaveChangesAsync();
+        }
 
-
-
-            throw new NotImplementedException();
+        private string GetEmailBody(Teacher teacher, int code)
+        {
+            var link = Configuration["WebsiteAddress"] + $"api/Authentication/VerifyEmail?Id={teacher.Id}&code={code}";
+            var base64EmailBody = System.Convert.ToBase64String(
+                Encoding.UTF8.GetBytes($"To: {teacher.Email.Split(',')[0]},\r\n" +
+                                       "Subject: subject Test\r\n" +
+                                       "Content-Type: text/html; charset=us-ascii\r\n\r\n" +
+                                       $"<h1><a href=\"{link}\">لینک فعالسازی حساب کاربری شما در سامانه اطلاع رسانی دانشگاه زنجان</a></h1>")
+            ).TrimEnd().Replace('+', '-').Replace('/', '_');
+            return base64EmailBody;
+        }
+        private static int GetRandomCode()
+        {
+            var code = new Random().Next(999, 10_000);
+            return code;
         }
     }
 }
