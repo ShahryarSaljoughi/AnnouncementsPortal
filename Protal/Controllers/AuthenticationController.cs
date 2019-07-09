@@ -32,8 +32,18 @@ namespace Portal.Controllers
         {
             //todo: input validation logic
             var user = await Db.Set<Teacher>().FirstOrDefaultAsync(i => i.Email.Contains(dto.Email));
+
+            if (dto is null)
+                return BadRequest("given dto is null");
+
+            if (string.IsNullOrWhiteSpace(dto.Email) | string.IsNullOrWhiteSpace(dto.Password))
+                return BadRequest("none of password or email can be empty");
+
+            if (!dto.Email.Contains("@znu.ac.ir"))
+                return BadRequest($"{dto.Email} is not a valid ZNU email.");
+
             if (user is null)
-                return BadRequest();
+                return BadRequest($"User with email `{dto.Email}` not found");
             try
             {
                 await UserService.Register(dto);
@@ -56,7 +66,7 @@ namespace Portal.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
 
             var jwt = UserService.GenerateJwt(user);

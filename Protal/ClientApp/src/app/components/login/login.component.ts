@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.auth.login(this.dto.email, this.dto.password).subscribe();
-    this.router.navigate(['']);
+    this.router.navigate(['/directory']);
   }
 }
 

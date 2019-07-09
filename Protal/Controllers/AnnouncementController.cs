@@ -68,10 +68,10 @@ namespace Portal.Controllers
                     Author = new TeacherDto()
                     {
                         Name = string.Join(' ', ad.Owner.Firstname, ad.Owner.Lastname),
-                        Phone = ad.Owner.Phone,
+                        Phone = ad.Owner?.Phone,
                         TeacherId = ad.OwnerId,
-                        ZnuUrl = ad.Owner.ZnuUrl,
-                        Department = ad.Owner.Department.PersianName,
+                        ZnuUrl = ad.Owner?.ZnuUrl,
+                        Department = ad.Owner?.Department?.PersianName,
                         College = ad.Owner?.Department?.College.GetPersianTranslation()
                     },
                     PersianCreationTime = ad.CreationDateTimeOffset?.ToPersianDate(), //todo: convert to persian,

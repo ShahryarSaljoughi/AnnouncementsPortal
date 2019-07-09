@@ -13,7 +13,8 @@ export class CreateAnnouncementComponent implements OnInit {
   public dto = new NewAnnouncementDto();
   uploadProgress: number = null;
   serverAssignedFileId: string;
-  @ViewChild('file') file: any;
+  imgSrc: string | ArrayBuffer;
+  @ViewChild('file') file: any = null;
 
   constructor(private http: HttpClient, private uploadService: UploadService) { }
 
@@ -21,7 +22,6 @@ export class CreateAnnouncementComponent implements OnInit {
   }
 
   createPost() {
-    debugger;
     this.dto.imageFileId = this.serverAssignedFileId;
     this.http.post('http://localhost:5000/api/Announcement/PostNewAnnouncement', this.dto).subscribe();
   }
@@ -33,8 +33,8 @@ export class CreateAnnouncementComponent implements OnInit {
     this.file.nativeElement.click();
   }
   onFileAdded() {
-    debugger;
-    let selectedFile = this.file.nativeElement.files.item(this.file.nativeElement.files.length - 1);
+    this.previewFile();
+    const selectedFile = this.file.nativeElement.files.item(this.file.nativeElement.files.length - 1);
     const formData = new FormData();
     formData.append('uploadedFile', selectedFile);
     this.uploadProgress = 0;
@@ -53,6 +53,15 @@ export class CreateAnnouncementComponent implements OnInit {
     );
   }
 
+  previewFile() {
+    const the_file = this.file.nativeElement.files.item(0);
+    if (the_file) {
+      const reader = new FileReader();
+      reader.onload = e => this.imgSrc = reader.result;
+      reader.readAsDataURL(the_file);
+    }
+  }
+
   isUploading () {
     return !!this.uploadProgress;
   }
@@ -64,6 +73,28 @@ export class CreateAnnouncementComponent implements OnInit {
 
   getUploadProgress() {
     return `${this.uploadProgress}%`;
+  }
+
+  isFileSelected(): boolean {
+    debugger;
+    if (this.file.nativeElement.files.length === 0) {
+      return false;
+    }
+    return true;
+
+  }
+
+  removeSelectedFile() {
+    this.dto.imageFileId = null;
+    this.uploadProgress = null;
+    console.log(`selected file is: ${this.file.nativeElement.value}`);
+    this.file.nativeElement.value = '';
+    this.previewFile()
+  }
+
+  getFilePath() {
+    const result = this.file.nativeElement.value;
+    return result;
   }
 
 }
