@@ -4,6 +4,7 @@ import { dashCaseToCamelCase } from '@angular/animations/browser/src/util';
 import { HttpClient } from '@angular/common/http';
 import {  AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { AlertifyService } from 'src/app/services/alertify.service';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
 export class RegisterComponent implements OnInit {
   dto: RegisterDto = new RegisterDto();
   confirmPassword = '';
-  constructor(private http: HttpClient, private auth: AuthService, private router: Router) { }
+  constructor(private http: HttpClient, private auth: AuthService, private router: Router, private alertify: AlertifyService) { }
 
   ngOnInit() {
   }
@@ -27,8 +28,14 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.auth.register(this.dto.email, this.dto.password).subscribe((v) => {});
+    this.auth.register(this.dto.email, this.dto.password).subscribe((v) => {
+      this.alertify.warning('ایمیل فعالسازی برای شما ارسال شد');
     this.router.navigate(['login']);
+    },
+    errr => {
+      console.log(errr.error);
+      this.alertify.error(errr.error);
+    });
   }
 
 }

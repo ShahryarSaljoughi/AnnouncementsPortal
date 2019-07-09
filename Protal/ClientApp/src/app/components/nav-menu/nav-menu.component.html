@@ -8,10 +8,10 @@
       </button>
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+          <li class="nav-item" [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }' *ngIf="!isAuthenticated()">
             <a class="nav-link " [routerLink]='["/login"]'>ورود</a>
           </li>
-          <li class="nav-item" [routerLinkActive]='["link-active"]'>
+          <li class="nav-item" [routerLinkActive]='["link-active"]' *ngIf="!isAuthenticated()">
             <a class="nav-link text-success" [routerLink]='["/register"]'>عضویت</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>

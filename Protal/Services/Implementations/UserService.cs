@@ -54,15 +54,15 @@ namespace Portal.Services.Implementations
         {
             var user = await GetUserByEmail(email);
             if (user is null)
-                throw new AppException("user does not exist") { ExceptionReason = ExceptionReason.LoginFailed};
+                throw new AppException("کاربر وجود ندارد") { ExceptionReason = ExceptionReason.LoginFailed};
             if (user.AccountActivated == false)
             {
-                throw new AppException("account has not been activated"){ExceptionReason = ExceptionReason.LoginFailed};
+                throw new AppException("حساب کاربری شما فعال نشده است"){ExceptionReason = ExceptionReason.LoginFailed};
             }
             var doesPasswordMatch = VerifyPassword(password, user.PasswordHash, user.PasswordSalt);
 
             if (!doesPasswordMatch)
-                throw new AppException("Email or Password is incorrect")
+                throw new AppException("رمز عبور و یا ایمیل،اشتباه است.")
                     {ExceptionReason = ExceptionReason.LoginFailed};
 
             return user;
