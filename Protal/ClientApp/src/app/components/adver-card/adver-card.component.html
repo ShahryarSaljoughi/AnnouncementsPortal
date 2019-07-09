@@ -1,39 +1,17 @@
 
-<div class="container">
-  <div class="row">
-    <div class="col">
-        <div class="card ">
-            <img *ngIf="advertData.imageUrl" class="card-img-top" src="{{advertData.imageUrl}}" alt="Card image cap">
-            <div class="card-body ">
-              <div class="row" style="display: table;">
-                <div class="col-11" style="display: table-cell;">
-                    <h5 class="card-title" >
-                        <p class="text-right">{{advertData.title}}</p>
-                      </h5>
-                      <i class="far fa-clock "></i> 
-                      <p class="card-text "> {{advertData.text | dotdotdot:10}} </p>    
-                </div>
-                <div class="col-1 " style="display: table-cell; vertical-align: bottom; float: none;">
-                      <a name="" id="" class="btn btn-primary " href="#" role="button">مشاهده</a>   
-                </div>
-              </div>
-            </div>
-            <div class="card-footer text-muted">
-              <div class="row" >
-                <div class="col">
-                    <i class="far fa-clock" ></i>
-                    <span class="mr-2">{{advertData.persianCreationTime}}</span>
-                </div>
-                <div class="col">
-                  توسط : {{advertData.author.name}} 
-                </div>
-              </div>
-                
-            </div>
-        </div>
+<div class="card text-right">
+    <img *ngIf="advertData.imageUrl" class="card-img-top" src="{{advertData.imageUrl}}" alt="Card image cap">
+    <div class="card-body ">
+      <h5 class="card-title" >
+        <p class="text-right">{{advertData.title}}</p>
+      </h5>
+      <p class="card-text text-right "> {{advertText}} </p>
+      <p class="text-primary"(click)="showFullAdvertText()" *ngIf="shouldShowSeeMoreOption()">ادامه</p>     
     </div>
-    
-      
-  </div>
-    
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><p class="card-text"><span class="text-muted"> توسط : {{advertData.author.name}} </span></p></li>
+      <li class="list-group-item"><p class="card-text"><span class="text-muted"> تلفن: {{advertData.phoneNo}} </span></p></li>
+      <li class="list-group-item"><p class="card-text"><span class="text-muted"> تاریخ درج: {{advertData.persianCreationTime}} </span></p></li>
+    </ul>
 </div>
+

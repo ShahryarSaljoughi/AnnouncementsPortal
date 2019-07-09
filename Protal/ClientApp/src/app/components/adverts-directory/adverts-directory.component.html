@@ -1,11 +1,12 @@
 
-<div class="container text-right" >
+<!-- <div class="container text-right" >
   <div class="row  my-2 " *ngFor="let advert of announcements">
     <div class="col ">  
         <app-adver-card   [advertData]="advert"></app-adver-card>      
     </div>
   </div>
-</div>
+</div> -->
   
-
-
+<div class="card-columns">
+  <app-adver-card [advertData]="advert" *ngFor="let advert of announcements"></app-adver-card>
+</div>
