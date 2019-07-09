@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { NewAnnouncementDto } from 'src/app/models/newAnnouncementDto';
 import { UploadService } from 'src/app/services/upload.service';
-
+import { AlertifyService } from 'src/app/services/alertify.service';
 @Component({
   selector: 'app-create-announcement',
   templateUrl: './create-announcement.component.html',
@@ -16,7 +16,7 @@ export class CreateAnnouncementComponent implements OnInit {
   imgSrc: string | ArrayBuffer;
   @ViewChild('file') file: any = null;
 
-  constructor(private http: HttpClient, private uploadService: UploadService) { }
+  constructor(private http: HttpClient, private uploadService: UploadService, private alertify: AlertifyService) { }
 
   ngOnInit() {
   }
@@ -24,6 +24,7 @@ export class CreateAnnouncementComponent implements OnInit {
   createPost() {
     this.dto.imageFileId = this.serverAssignedFileId;
     this.http.post('http://localhost:5000/api/Announcement/PostNewAnnouncement', this.dto).subscribe();
+    this.alertify.success("اعلانیه شما با موفقیت درج شد!");
   }
 
   uploadFile() {
