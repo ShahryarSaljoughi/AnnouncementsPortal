@@ -22,6 +22,11 @@ namespace Models.Entities
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
 
+        public string GetFullName()
+        {
+            return string.Join(' ', Firstname, Lastname);
+        }
+
         // todo: add school and department : گروه آموزشی و دانشکده
     }
 }

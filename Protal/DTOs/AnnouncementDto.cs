@@ -14,5 +14,6 @@ namespace Portal.DTOs
         public TeacherDto Author { get; set; }
         public string PhoneNo { get; set; }
         public string ImageUrl { get; set; }
+        public Guid AnnouncementId { get; set; }
     }
 }

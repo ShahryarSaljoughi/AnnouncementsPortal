@@ -5,7 +5,8 @@ export class Announcement {
     public title: string;
     public text: string;
     public phoneNo: string;
-    public persianCreationTime: string;  
-    constructor() {    
+    public persianCreationTime: string;
+    public announcementId: string;
+    constructor() {
     }
 }

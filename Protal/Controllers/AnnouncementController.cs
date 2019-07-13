@@ -33,7 +33,7 @@ namespace Portal.Controllers
         [Authorize]
         public async Task<IActionResult> PostNewAnnouncement([FromBody] PostAnnouncementDto dto)
         {
-            var user = await GetCurrentUser();
+            var user = await GetCurrentUserAsync();
             if (user is null)
             {
                 return BadRequest("there were problems in authenticating the client ");
@@ -57,12 +57,21 @@ namespace Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAnnouncements([FromBody]GetAnnouncementsDto dto)
         {
-            var ads = await Db.Set<Announcement>().Include(t => t.Owner).Include(t => t.File).Include(a => a.Owner.Department)
+            IQueryable<Announcement> ads = Db.Set<Announcement>().Include(t => t.Owner);
+                
+
+            ads = ApplyFilters(ads, dto.Filter);
+
+            var listOfAds = await ads
+                .Include(a => a.Owner.Department)
+                .Include(t => t.File)
+                .OrderBy(i => i.CreationDateTimeOffset)
                 .Skip((dto.PageNumber - 1) * dto.PageSize)
                 .Take(dto.PageSize)
                 .ToListAsync();
+
             var result = 
-                from ad in ads
+                from ad in listOfAds
                 select new AnnouncementDto()
                 {
                     Author = new TeacherDto()
@@ -78,61 +87,34 @@ namespace Portal.Controllers
                     Text = ad.Text,
                     Title = ad.Title,
                     PhoneNo = ad.PhoneNo,
-                    ImageUrl = ad.File is null ? null: $"/{ad.File?.FileName}"
+                    ImageUrl = ad.File is null ? null: $"/{ad.File?.FileName}",
+                    AnnouncementId = ad.Id
                 };
             return Ok(result);
         }
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> PostAnnouncement(CreateAnnouncementDto dto)
+        private IQueryable<Announcement> ApplyFilters(IQueryable<Announcement> ads, AdvertFilterDto dtoFilter)
         {
-            var user = await GetCurrentUser();
-            if (user is null)
+            if (dtoFilter is null) return ads;
+            if (dtoFilter.From.HasValue)
             {
-                return BadRequest("there were problems in authenticating the client ");
+                ads = ads.Where(i =>
+                    (i.CreationDateTimeOffset.HasValue && i.CreationDateTimeOffset.Value > dtoFilter.From )
+                    || !i.CreationDateTimeOffset.HasValue);
             }
-            var phone = string.IsNullOrWhiteSpace(dto.PhoneNo) ? user.Phone : dto.PhoneNo;
-            var newAnnouncement = new Announcement()
-            {
-                Text = dto.Text,
-                Title = dto.Title,
-                OwnerId = user.Id,
-                Owner = user,
-                PhoneNo = phone,
-                CreationDateTimeOffset = DateTimeOffset.Now
-            };
             
-            long size = dto.uploadedFile.Length;
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
-
-            if (dto.uploadedFile.Length > 0)
+            if (dtoFilter.To.HasValue)
             {
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await dto.uploadedFile.CopyToAsync(stream);
-                }
+                ads = ads.Where(i =>
+                    (i.CreationDateTimeOffset.HasValue && i.CreationDateTimeOffset.Value < dtoFilter.To)
+                    || !i.CreationDateTimeOffset.HasValue);
             }
-            var fileName = GetFileName(dto.uploadedFile);
-            var path = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "wwwroot",
-                fileName
-            );
-            System.IO.File.Move(filePath, path);
-            var newFile = new UploadedFile()
+            
+            if (dtoFilter.OwnerId.HasValue)
             {
-                CreationDateTimeOffset = DateTimeOffset.Now,
-                Id = Guid.NewGuid(),
-                FileName = fileName,
-                PhysicalPath = path
-            };
-            newAnnouncement.File = newFile;
-            Db.Add(newAnnouncement);
-            Db.Add(newFile);
-            await Db.SaveChangesAsync();
-            return Ok();
+                ads = ads.Where(i => i.OwnerId == dtoFilter.OwnerId);
+            }
+            return ads;
         }
 
 
@@ -177,12 +159,59 @@ namespace Portal.Controllers
             return Ok(new { newFile.Id, newFile.FileName, Url=$"/{newFile.FileName}"});
         }
 
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EditAnnouncement([FromBody]EditAnnouncementDto dto)
+        {
+            if (dto is null)
+                return BadRequest("مقادیر ارسالی معتبر نیست");
+            var advert = await Db.Set<Announcement>().FindAsync(dto.AdvertId);
+            if (advert is null)
+                return BadRequest("آگهی یافت نشد");
+
+            if (!string.IsNullOrWhiteSpace(dto.NewValues.PhoneNo))
+            {
+                advert.PhoneNo = dto.NewValues.PhoneNo;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.NewValues.Text))
+            {
+                advert.Text = dto.NewValues.Text;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.NewValues.Title))
+            {
+                advert.Title = dto.NewValues.Title;
+            }
+
+            await Db.SaveChangesAsync();
+            return Ok(advert);
+        }
+
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteAnnouncement([FromBody]DeleteAnnouncementDto dto)
+        {
+            var user = await GetCurrentUserAsync();
+            if (dto?.AnnouncementId is null)
+                return BadRequest("مقادیر ارسالی معتبر نیست");
+            var advert = await Db.Set<Announcement>().FindAsync(dto.AnnouncementId);
+            if (advert is null)
+                return BadRequest($"آگهی با آیدی {dto.AnnouncementId} یافت نشد!");
+            if (advert.OwnerId != user.Id)
+                return BadRequest("اجازه پاک کردن این آگهی را ندارید.");
+            Db.Remove(advert);
+            await Db.SaveChangesAsync();
+            return Ok();
+        }
         private string GetFileName(IFormFile file)
         {
             var fileName = $"{DateTimeOffset.UtcNow.Ticks}_{file.FileName.Replace(' ', '_').ToLower()}";
             return fileName;
         }
-        private async Task<Teacher> GetCurrentUser()
+        private async Task<Teacher> GetCurrentUserAsync()
         {
             var userId = Guid.Parse(HttpContext.User.Claims.FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier)?.Value);
             var user = await Db.Set<Teacher>().FindAsync(userId);

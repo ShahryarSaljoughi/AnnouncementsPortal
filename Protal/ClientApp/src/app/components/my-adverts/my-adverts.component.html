@@ -1,0 +1,20 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">عنوان</th>
+      <th scope="col">تاریخ</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of myAdverts; index as i">
+      <th scope="row">{{i}}</th>
+      <td>{{item.title | dotdotdot: 80}}</td>
+      <td>{{item.persianCreationTime}}</td>
+      <td>
+        <i class="fas fa-trash-alt" (click)="removeAdvert(item.announcementId)"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>

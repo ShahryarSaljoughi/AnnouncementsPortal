@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class NavMenuComponent {
   isExpanded = false;
- 
+
   constructor(public auth: AuthService, private router: Router) {  }
   collapse() {
     this.isExpanded = false;
@@ -26,10 +26,15 @@ export class NavMenuComponent {
     this.router.navigate(['newAnnouncement']);
   }
 
+  goToProfile() {
+    this.router.navigate(['profile']);
+  }
+
+  goToMyAdverts() {
+    this.router.navigate(['myAdverts']);
+  }
+
   toggle() {
     this.isExpanded = ! this.isExpanded;
   }
-  
-
-
 }

@@ -21,6 +21,8 @@ import { AdverDetailComponent } from './components/adver-detail/adver-detail.com
 import { AuthGuard } from './auth.guard';
 import { LandingComponent } from './components/landing/landing.component';
 import { HomeComponent } from './components/home/home.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { MyAdvertsComponent } from './components/my-adverts/my-adverts.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { HomeComponent } from './components/home/home.component';
     ThreeDotPipe,
     AdverDetailComponent,
     LandingComponent,
+    ProfileComponent,
+    MyAdvertsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -57,6 +61,8 @@ import { HomeComponent } from './components/home/home.component';
       { path: 'register', component: RegisterComponent},
       { path: 'directory', component: AdvertsDirectoryComponent},
       { path: 'newAnnouncement', component: CreateAnnouncementComponent, canActivate: [AuthGuard]},
+      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+      { path: 'myAdverts', component: MyAdvertsComponent, canActivate: [AuthGuard]}
     ])
   ],
   providers: [],
