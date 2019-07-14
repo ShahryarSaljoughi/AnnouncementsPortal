@@ -9,6 +9,8 @@ namespace Portal.DTOs
     {
         public Guid? TeacherId { get; set; }
         public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Phone { get; set; }
         public string ZnuUrl { get; set; }
         public string College { get; set; }

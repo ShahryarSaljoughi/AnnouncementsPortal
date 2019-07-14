@@ -65,7 +65,7 @@ namespace Portal.Controllers
             var listOfAds = await ads
                 .Include(a => a.Owner.Department)
                 .Include(t => t.File)
-                .OrderBy(i => i.CreationDateTimeOffset)
+                .OrderByDescending(i => i.CreationDateTimeOffset)
                 .Skip((dto.PageNumber - 1) * dto.PageSize)
                 .Take(dto.PageSize)
                 .ToListAsync();
@@ -77,6 +77,8 @@ namespace Portal.Controllers
                     Author = new TeacherDto()
                     {
                         Name = string.Join(' ', ad.Owner.Firstname, ad.Owner.Lastname),
+                        FirstName = ad.Owner?.Firstname,
+                        LastName = ad.Owner?.Lastname,
                         Phone = ad.Owner?.Phone,
                         TeacherId = ad.OwnerId,
                         ZnuUrl = ad.Owner?.ZnuUrl,
@@ -92,6 +94,27 @@ namespace Portal.Controllers
                 };
             return Ok(result);
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetAnnouncementsCount([FromBody]GetAnnouncementsDto dto)
+        {
+            IQueryable<Announcement> ads = Db.Set<Announcement>().Include(t => t.Owner);
+
+
+            ads = ApplyFilters(ads, dto?.Filter);
+
+            var adsNo = await ads
+                .Include(a => a.Owner.Department)
+                .Include(t => t.File)
+                .OrderBy(i => i.CreationDateTimeOffset)
+                .CountAsync();
+            return Ok(new
+            {
+                Count = adsNo
+            });
+        }
+
 
         private IQueryable<Announcement> ApplyFilters(IQueryable<Announcement> ads, AdvertFilterDto dtoFilter)
         {

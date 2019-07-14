@@ -33,6 +33,8 @@ namespace Portal.Controllers
                 ZnuUrl = teacher.ZnuUrl,
                 College = teacher.Department?.College.ToString(),
                 Name = teacher.GetFullName(),
+                FirstName = teacher.Firstname,
+                LastName = teacher.Lastname,
                 Phone = teacher.Phone,
                 TeacherId = teacher.Id
             };

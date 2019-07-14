@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Announcement } from '../models/Announcement';
-import { Observable } from 'rxjs';
+import { Observable, observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,16 @@ export class AdvertService {
           ownerId: localStorage.getItem('teacherId')
         }
     });
+  }
+
+  getAdsNo(): Observable<number> {
+    return this.http.post<{count: number}>(
+      'http://localhost:5000/api/Announcement/GetAnnouncementsCount', {}
+      ).pipe(
+        map(n => {
+          return n.count;
+        })
+      );
   }
 
   removeAdvert(advertId: string) {

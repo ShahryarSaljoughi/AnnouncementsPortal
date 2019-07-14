@@ -19,8 +19,8 @@ export class ProfileComponent implements OnInit {
       this.teacherInfo = value;
       this.teacherNewInfo.phone = value.phone;
       this.teacherNewInfo.znuUrl = value.znuUrl;
-      this.teacherNewInfo.firstName = value.name;
-      this.teacherNewInfo.lastName = '';
+      this.teacherNewInfo.firstName = value.firstName || value.name;
+      this.teacherNewInfo.lastName = value.lastName;
       console.log(this.teacherInfo);
     },
     err => {

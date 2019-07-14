@@ -37,7 +37,7 @@ export class MyAdvertsComponent implements OnInit {
           localStorage.setItem('teacherId', val.teacherId);
           this.teacherId = val.teacherId;
         }
-      )
+      );
     }
   }
 
@@ -55,8 +55,7 @@ export class MyAdvertsComponent implements OnInit {
         if (itemToRemoveIndex > -1) {
           this.myAdverts.splice(itemToRemoveIndex, 1);
         }
-      }
-
+      },
       (err) => {
         this.alertify.error(err.error);
       }
