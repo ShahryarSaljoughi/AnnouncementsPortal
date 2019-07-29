@@ -13,6 +13,7 @@ import { AlertifyService } from 'src/app/services/alertify.service';
 export class MyAdvertsComponent implements OnInit {
   teacherId: string;
   myAdverts: Announcement[] = new Array<Announcement>();
+  currentPage = 1;
   constructor(private teacherService: TeacherService, private advertService: AdvertService, private alertify: AlertifyService) { }
 
   ngOnInit() {
@@ -21,7 +22,7 @@ export class MyAdvertsComponent implements OnInit {
     console.log(this.myAdverts);
   }
   getMyAdverts() {
-    this.advertService.getMyAdverts(30, 1).subscribe(
+    this.advertService.getMyAdverts(30, this.currentPage).subscribe(
       (val) => {
         val.forEach(element => {
           this.myAdverts.push(element);
@@ -60,6 +61,11 @@ export class MyAdvertsComponent implements OnInit {
         this.alertify.error(err.error);
       }
     );
+  }
+
+  loadMore() {
+    this.currentPage ++;
+    this.getMyAdverts();
   }
 
 }
