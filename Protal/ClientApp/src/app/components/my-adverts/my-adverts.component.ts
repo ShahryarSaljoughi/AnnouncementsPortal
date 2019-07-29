@@ -55,6 +55,7 @@ export class MyAdvertsComponent implements OnInit {
         );
         if (itemToRemoveIndex > -1) {
           this.myAdverts.splice(itemToRemoveIndex, 1);
+          this.alertify.success('آگهی مورد نظر پاک شد')
         }
       },
       (err) => {
